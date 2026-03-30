@@ -3,7 +3,7 @@ jtf_optcg:
   outputs:
     duckdb:
       type: duckdb
-      path: D:/CODE/Data_eng_zoomcamp/jtf_project/setup/op.duckdb
+      path: YOUR-PATH-HERE/jtf_project/setup/op.duckdb
       schema: dev
       threads: 1
       settings:
@@ -15,4 +15,4 @@ jtf_optcg:
       project: jtf-optcg
       dataset: jtf_optcg
       threads: 4
-      keyfile: D:/CODE/Data_eng_zoomcamp/jtf_project/setup/my_credentials.json
+      keyfile: YOUR-PATH-HERE/jtf_project/setup/my_credentials.json

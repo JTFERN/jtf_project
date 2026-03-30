@@ -38,3 +38,4 @@ setup/.terraform
 setup/terraform.tfstate
 
 .user.yml
+tableau_01.png

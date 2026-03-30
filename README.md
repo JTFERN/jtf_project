@@ -2,7 +2,9 @@
 
 A data engineering project that scrapes, processes, and analyzes One Piece Trading Card Game (OPTCG) tournament deck data using modern data stack tools.
 
-## Overview
+One Piece Trading Card Game (OPTCG) is a popular competitive game, though it's sometimes hard to get access to the top performing decks or run deeper performance analysis. Most relevant data is often locked behind paid tools. This project collects tournament data from one of the most popular websites (https://onepiecetopdecks.com/) parses and cleans it, and creates a dashboard for easy visualization.
+
+## Project Overview
 
 This project collects decklist data from OPTCG tournaments, transforms it using dbt, and provides analytics through a Tableau dashboard. It demonstrates end-to-end data pipeline orchestration with Dagster, supporting both local development (DuckDB) and cloud deployment (Google BigQuery).
 
@@ -19,7 +21,7 @@ This project collects decklist data from OPTCG tournaments, transforms it using 
 
 - **Package Management**: uv
 - **Orchestration**: Dagster
-- **Transformation**: dbt
+- **Transformation**: DBT
 - **Databases**: DuckDB (local), Google BigQuery (cloud)
 - **Scraping**: Python with BeautifulSoup4 and requests
 - **IaC**: Terraform
@@ -49,7 +51,7 @@ This project collects decklist data from OPTCG tournaments, transforms it using 
 └── README.md
 ```
 
-## Setup Instructions
+## Setup and Workflow Instructions
 
 ### Prerequisites
 
@@ -61,6 +63,7 @@ This project collects decklist data from OPTCG tournaments, transforms it using 
 uv sync  # Installs dependencies and creates virtual environment
 ```
    > **Note**: This project uses uv for all Python package management. The `uv.lock` file ensures reproducible environments across all deployment scenarios.
+   You can activate the uv environment with `source .venv/bin/activate` or write `uv run` before any command.
 
 **For cloud deployment only:**
 - Google Cloud service account with appropriate permissions
@@ -82,6 +85,7 @@ uv sync  # Installs dependencies and creates virtual environment
 
 3. **Run dbt transformations:**
    ```bash
+   # Update path in profiles.yml
    # Run dbt models using Dagster
    dagster job execute -f orch.definitions -j duck_dbt_build_model
    ```
@@ -89,30 +93,66 @@ uv sync  # Installs dependencies and creates virtual environment
 ### Cloud Deployment Setup
 
 1. **Create Google Cloud service account:**
+    
+    Make sure you have the following permissions on your service account:
+    - BigQuery Admin
+    - BigQuery Data Owner
+    - Compute Admin
+    - Owner
+    - Storage Admin
+    - Storage Object Admin
+    - Storage Object Creator
+    - Viewer
 
+    ```
+    How to Download Service Account JSON Key
+    If you don't have the JSON key file or need to download a new one:
+
+    Go to Google Cloud Console
+
+    Navigate to IAM & Admin > Service Accounts
+
+    Or use the search bar and type "Service Accounts"
+    Find your service account in the list
+
+    It should look like: service-account-name@project-id.iam.gserviceaccount.com
+    If you don't have a service account yet, click + CREATE SERVICE ACCOUNT and:
+    Enter a name (e.g., dbt-bigquery-service-account)
+    Click CREATE AND CONTINUE
+    Add these roles:
+    BigQuery Admin (or at minimum: BigQuery Data Editor, BigQuery Job User, BigQuery User)
+    Click CONTINUE > DONE
+    Click on your service account name to open its details
+
+    Go to the KEYS tab
+
+    Click ADD KEY > Create new key
+
+    Select JSON as the key type
+
+    Click CREATE
+
+    The JSON key file will automatically download to your computer
+
+    Save it in a secure location
+    Never commit this file to Git or share it publicly - it contains credentials to access your GCP resources
+    ```
 
 2. **Update credentials file:**
    Place the downloaded `my_credentials.json` in the `setup/` directory.
 
 3. **Run cloud pipeline:**
    ```bash
+   # Create GCP infra
    dagster job execute -f orch.definitions -j gcp_infra
+   # Run the GCP ETL pipeline
    dagster job execute -f orch.definitions -j gcp_bq_ingest
+   # Update path in profiles.yml
+   # Run dbt models using Dagster
    dagster job execute -f orch.definitions -j gcp_dbt_build_model
    ```
 
-## Usage
-
-### Running the Pipeline
-
-Start the Dagster webserver:
-```bash
-dagster dev
-```
-After running, you will see a message like
-`- dagster-webserver - INFO - Serving dagster-webserver on`.
-
-Access the UI at the shared URL to execute jobs manually or set up schedules.
+## Manual Usage
 
 ### Data Scraping
 
@@ -126,13 +166,21 @@ python setup/scrape_leaders.py
 
 ```bash
 cd jtf_optcg
-dbt compile          # Compile models
-dbt test            # Run tests
-dbt docs generate   # Generate documentation
-dbt docs serve      # View documentation
+dbt build      # Create the models
 ```
 
-## Data Model
+### Running the Pipeline
+
+Start the Dagster webserver:
+```bash
+dagster dev
+```
+After running, you will see a message like
+`- dagster-webserver - INFO - Serving dagster-webserver on`.
+
+Access the UI at the shared URL to execute jobs manually or set up schedules.
+
+## DBT Data Model
 
 - **Raw Layer**: Source data from scraped CSV files
 - **Staging Layer**: Cleaned and standardized data
@@ -147,12 +195,9 @@ Key entities:
 
 View the Tableau dashboard: [OPTCG Analytics Dashboard](https://public.tableau.com/app/profile/jo.o.fernando1427/viz/optcg_dashboard/OPTCG)
 
-## Development Notes
+   > **Note**: A sample of the csv of the final mart table `tableau_sample.csv` was added together with a `optcg_dashboard.twb` tableau file, so it can be locally replicated. Open the file and change the data source to math the desired csv file.
 
-- Local development uses DuckDB for fast iteration
-- Cloud deployment uses BigQuery for scalability
-- GCP infrastructure (BigQuery datasets, storage buckets) is provisioned via Dagster's `gcp_infra` job
-- Dagster orchestrates the entire ETL pipeline
+![Tableau Dashboard](tableau_01.png)
 
 
 ## License
