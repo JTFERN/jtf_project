@@ -59,17 +59,10 @@ This project collects decklist data from OPTCG tournaments, transforms it using 
 - uv (Python package installer and resolver)
 - Terraform
 
-```
-uv sync  # Installs dependencies and creates virtual environment
-```
-   > **Note**: This project uses uv for all Python package management. The `uv.lock` file ensures reproducible environments across all deployment scenarios.
-   You can activate the uv environment with `source .venv/bin/activate` or write `uv run` before any command.
-
 **For cloud deployment only:**
 - Google Cloud service account with appropriate permissions
 
-
-### Local Development Setup
+### Starting the Project
 
 1. **Clone and install dependencies:**
    ```bash
@@ -77,17 +70,32 @@ uv sync  # Installs dependencies and creates virtual environment
    cd jtf-project
    ```
 
-2. **Set up DuckDB environment:**
+2. **Sync Dependencies:**
+   ```bash
+  uv sync  # Installs dependencies and creates virtual environment
+   ```
+   > **Note**: This project uses uv for all Python package management. The `uv.lock` file ensures reproducible environments across all deployment scenarios.
+   You can activate the uv environment with `source .venv/bin/activate` or write `uv run` before any command.
+
+3. **Prepare DBT**
+``` bash
+# Update path in profiles.yml (for GCP credentials see following steps)
+cd jtf_optcg
+dbt deps
+dbt parse
+dbt debug
+### Local Development Setup
+
+1. **Extract and load into DuckDB environment:**
    ```bash
    # Run the DuckDB ETL pipeline
-   dagster job execute -f orch.definitions -j duck_extract_load
+   dagster job execute -f orch/definitions.py -j duck_db_01_extract_load
    ```
 
-3. **Run dbt transformations:**
+2. **Run dbt transformations:**
    ```bash
-   # Update path in profiles.yml
    # Run dbt models using Dagster
-   dagster job execute -f orch.definitions -j duck_dbt_build_model
+   dagster job execute -f orch/definitions.py -j duck_db_02_dbt_build
    ```
 
 ### Cloud Deployment Setup
@@ -144,12 +152,11 @@ uv sync  # Installs dependencies and creates virtual environment
 3. **Run cloud pipeline:**
    ```bash
    # Create GCP infra
-   dagster job execute -f orch.definitions -j gcp_infra
+   dagster job execute -f orch/definitions.py -j gcp_01_infra_start
    # Run the GCP ETL pipeline
-   dagster job execute -f orch.definitions -j gcp_bq_ingest
-   # Update path in profiles.yml
+   dagster job execute -f orch/definitions.py -j gcp_02_bq_extract_load
    # Run dbt models using Dagster
-   dagster job execute -f orch.definitions -j gcp_dbt_build_model
+   dagster job execute -f orch/definitions.py -j gcp_03_dbt_build
    ```
 
 ## Manual Usage
