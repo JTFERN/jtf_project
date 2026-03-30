@@ -72,18 +72,22 @@ This project collects decklist data from OPTCG tournaments, transforms it using 
 
 2. **Sync Dependencies:**
    ```bash
-  uv sync  # Installs dependencies and creates virtual environment
+   uv sync  # Installs dependencies and creates virtual environment
    ```
+
    > **Note**: This project uses uv for all Python package management. The `uv.lock` file ensures reproducible environments across all deployment scenarios.
-   You can activate the uv environment with `source .venv/bin/activate` or write `uv run` before any command.
+   > You can activate the uv environment with `source .venv/bin/activate` or write `uv run` before any command.
+
+
 
 3. **Prepare DBT**
-``` bash
-# Update path in profiles.yml (for GCP credentials see following steps)
-cd jtf_optcg
-dbt deps
-dbt parse
-dbt debug
+    ``` bash
+    # Update path in profiles.yml (for GCP credentials see following steps)
+    cd jtf_optcg
+    dbt deps
+    dbt parse
+    dbt debug
+
 ### Local Development Setup
 
 1. **Extract and load into DuckDB environment:**
