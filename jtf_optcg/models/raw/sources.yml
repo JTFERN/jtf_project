@@ -1,0 +1,17 @@
+sources:
+  - name: raw
+    database: |
+      {%- if target.type == 'bigquery' -%}
+        {{ env_var('GCP_PROJECT_ID', 'jtf-optcg') }}
+      {%- else -%}
+        op
+      {%- endif -%}
+    schema: |
+      {%- if target.type == 'bigquery' -%}
+        jtf_optcg
+      {%- else -%}
+        dev
+      {%- endif -%}
+    tables:
+      - name: leaders
+      - name: decklists

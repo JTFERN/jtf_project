@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: stg_decklists
+    description: "Raw extract of the top finishing decklists for optcg"
+    
+    columns:
+      - name: deck_profile
+        data_type: varchar
+        description: "Internal deck identifier - the name is a mix of the leader and the set the leader is from"
+        tests:
+          - not_null
+
+      - name: deck_name
+        data_type: varchar
+        description: "Community name for the deck (in theory one leader can have different decks with different playstyles)"
+        tests:
+          - not_null
+
+      - name: finish_dt
+        data_type: date
+        description: "Date where the games occured"
+        tests:
+          - not_null
+
+      - name: country
+        data_type: varchar
+        description: "Country/Region where the player is from "
+        tests:
+          - not_null
+
+      - name: author
+        data_type: varchar
+        description: "Name of the player (sometimes its instead the name of the user who submited the decklist online)"
+        tests:
+          - not_null
+
+      - name: placement
+        data_type: varchar
+        description: "Tournament standing of the player"
+        tests:
+          - not_null
+
+      - name: tournament
+        data_type: varchar
+        description: "Name/type of the tournament where the games occured"
+        tests:
+          - not_null
+
+      - name: host
+        data_type: varchar
+        description: "Name of the store/organizer where the games occured"
+        tests:
+          - not_null
+
+      - name: leader_id
+        data_type: varchar
+        description: "ID of the leader used"
+        tests:
+          - not_null
+
+      - name: set_name
+        data_type: varchar
+        description: "Set identifier - used for identifiend the url source of the decklists as well as defining a tournament season "
+        tests:
+          - not_null

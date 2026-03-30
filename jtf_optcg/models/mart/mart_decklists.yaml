@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: mart_decklists
+    description: "Joining deck finishes with leader info"
+    columns:
+      - name: deck_name
+        data_type: varchar
+        description: "Community name for the deck (in theory one leader can have different decks with different playstyles)"
+
+      - name: finish_dt
+        data_type: date
+        description: "Date where the games occured"
+
+      - name: placement
+        data_type: varchar
+        description: "Tournament standing of the player"
+
+      - name: tournament
+        data_type: varchar
+        description: "Name/type of  tournament where the games occured"
+
+      - name: host
+        data_type: varchar
+        description: "Name of the store/organizer where the games occured"
+
+      - name: set_name
+        data_type: varchar
+        description: "Cleaned up Set Identifier"
+
+      - name: leader_id
+        data_type: varchar
+        description: "Leader Card ID"
+
+      - name: leader_name
+        data_type: varchar
+        description: "Leader Card Name"
+        tests:
+          - not_null
+
+      - name: color
+        data_type: varchar
+        description: "card color as extracted from official data - includes color 1 and color 2"
+
+      - name: color_numbers
+        data_type: integer
+        description: "How many colors the card has"
+
+      - name: primary_color
+        data_type: varchar
+        description: "Color 1"
+
+      - name: secondary_color
+        data_type: varchar
+        description: "Color 2 (-- when does not have a second color)"
+
+      - name: life
+        data_type: integer
+        description: "life points for the leader"
+
+      - name: power
+        data_type: integer
+        description: "power points for the leader"

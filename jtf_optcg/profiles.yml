@@ -1,0 +1,18 @@
+jtf_optcg:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: D:/CODE/Data_eng_zoomcamp/jtf_project/setup/op.duckdb
+      schema: dev
+      threads: 1
+      settings:
+        memory_limit: '8GB'
+        preserve_insertion_order: false
+    bigquery:
+      type: bigquery
+      method: service-account
+      project: jtf-optcg
+      dataset: jtf_optcg
+      threads: 4
+      keyfile: D:/CODE/Data_eng_zoomcamp/jtf_project/setup/my_credentials.json

@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: prep_decklists
+    description: "Clean layer of top finishing decklists"
+    columns:
+      - name: deck_name
+        data_type: varchar
+        description: "Community name for the deck (in theory one leader can have different decks with different playstyles)"
+
+      - name: leader_id
+        data_type: varchar
+        description: "Leader Card ID"
+
+      - name: finish_dt
+        data_type: date
+        description: "Date where the games occured"
+
+      - name: country
+        data_type: varchar
+        description: "Country/Region where the player is from "
+
+      - name: author
+        data_type: varchar
+        description: "Name of the player (sometimes its instead the name of the user who submited the decklist online)"
+
+      - name: placement
+        data_type: varchar
+        description: "Tournament standing of the player"
+
+      - name: tournament
+        data_type: varchar
+        description: "Name/type of  tournament where the games occured"
+
+      - name: host
+        data_type: varchar
+        description: "Name of the store/organizer where the games occured"
+
+      - name: set_name
+        data_type: varchar
+        description: "Set identifier - used for identifiend the url source of the decklists as well as defining a tournament season "

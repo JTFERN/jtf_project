@@ -1,0 +1,40 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+target/
+dbt_packages/
+logs/
+
+my_credentials_jtf.json
+*.duckdb
+*.exe
+*.ipynb
+notes.md
+# .tfstate files
+*.tfstate
+*.tfstate.*
+terraform.tfstate.backup
+*.terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+# Ignore transient lock info files created by terraform apply
+.terraform.tfstate.lock.info
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+setup/.terraform
+
+.ipynb_checkpoints/
+.vscode/
+.tmp_dagster_home_2nae7fms/
+setup/terraform.tfstate
+
+.user.yml

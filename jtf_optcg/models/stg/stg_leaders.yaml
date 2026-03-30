@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_leaders
+    description: "Raw extract of the existing leaders for optcg"
+    columns:
+      - name: name_set
+        data_type: varchar
+        description: "raw extract containing leader name and card id"
+        tests:
+          - not_null
+          - unique
+
+      - name: color
+        data_type: varchar
+        description: "card color as extracted from official data - includes color 1 and color 2"
+        tests:
+          - not_null
+
+      - name: life
+        data_type: integer
+        description: "life points for the leader"
+        tests:
+          - not_null
+
+      - name: power
+        data_type: integer
+        description: "power points for the leader"
+        tests:
+          - not_null

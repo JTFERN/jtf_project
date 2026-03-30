@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: prep_leaders
+    description: "Clean layer of the leader cards"
+    columns:
+      - name: leader_name
+        data_type: varchar
+        description: "Leader Card Name"
+
+      - name: leader_id
+        data_type: varchar
+        description: "Leader Card ID"
+        tests:
+          - unique
+
+      - name: color
+        data_type: varchar
+        description: "card color as extracted from official data - includes color 1 and color 2"
+
+      - name: color_numbers
+        data_type: integer
+        description: "How many colors the card has"
+
+      - name: primary_color
+        data_type: varchar
+        description: "Color 1"
+
+      - name: secondary_color
+        data_type: varchar
+        description: "Color 2 (-- when does not have a second color)"
+
+      - name: life
+        data_type: integer
+        description: "life points for the leader"
+
+      - name: power
+        data_type: integer
+        description: "power points for the leader"
